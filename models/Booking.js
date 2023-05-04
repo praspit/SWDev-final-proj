@@ -1,0 +1,27 @@
+const mongoose = require('mongoose');
+
+const BookingSchema = new mongoose.Schema({
+    apptDate: {
+        type: Date,
+        required: true,
+    },
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    prefDentist: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Dentist',
+    },
+    prefHospital: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Hospital',
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
+});
+
+module.exports = mongoose.model('Booking', BookingSchema);
