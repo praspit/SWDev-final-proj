@@ -33,8 +33,8 @@ const DentistSchema=new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpired: Date,
   hospital: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Hospital'
+        type: mongoose.Schema.ObjectId,
+        ref: 'Hospital',
   },
   createdAt:{
     type:Date,

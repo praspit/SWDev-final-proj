@@ -81,7 +81,10 @@ exports.login=async (req,res,next)=>{
 //@route  POST /api/v1/auth/me
 //@access Private
 exports.getMe=async(req,res,next)=>{
-  const dentist=await Dentist.findById(req.dentist.id);
+  const dentist= await Dentist.findById(req.dentist.id).populate({
+    path: 'hospital',
+    select: 'name province tel'
+  })
   res.status(200).json({
     success:true,
     data:dentist
