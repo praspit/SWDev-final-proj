@@ -9,19 +9,27 @@ exports.getBookings = async (req, res, next) => {
     let query;
     // General users can see only their Bookings!
     if (req.user.role === 'user') {
-        query = Booking.find({user: req.user.id}).populate({
-            path: 'hospital',
-            select: 'name province tel'
-        });
+        query = Booking.find({user: req.user.id})
     } else { // If you are an admin, you can see all Bookings!
-        query = Booking.find().populate({
-            path: 'hospital',
-            select: 'name province tel'
-        });
+        query = Booking.find();
     }
 
     try {
-        const bookings = await query;
+        const bookings = await Promise.all(query.map(async (booking) => {
+            if(booking.prefHospital){
+                await booking.populate({
+                    path: 'prefHospital',
+                    select: 'name province telephone'
+                })
+            }
+            if(booking.prefDentist){
+                await booking.populate({
+                    path: 'prefDentist',
+                    select: 'name yearOfExperience areaOfExpertise'
+                })
+            }
+        }));
+
         res.status(200).json({
             success: true,
             count: bookings.length,

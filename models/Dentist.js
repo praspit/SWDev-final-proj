@@ -22,6 +22,14 @@ const DentistSchema=new mongoose.Schema({
     minlength:6,
     select:false,
   },
+  yearOfExperience:{
+    type: Number,
+    required: [true, 'Please add year of experience'],
+  },
+  areaOfExpertise:{
+    type: String,
+    required: [true, "Please add area of expertise"]
+  },
   resetPasswordToken: String,
   resetPasswordExpired: Date,
   hospital: {

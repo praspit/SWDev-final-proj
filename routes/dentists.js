@@ -1,5 +1,5 @@
 const express = require('express');
-const {register, login, getMe, logout,updateDentist} = require('../controller/dentists');
+const {register, login, getMe, logout,updateDentist, getDentists} = require('../controller/dentists');
 
 const router = express.Router();
 
@@ -10,5 +10,6 @@ router.post('/login',login);
 router.get('/me',protect,getMe);
 router.get('/logout',logout);
 router.put('/:id',updateDentist);
+router.get('/',getDentists);
 
 module.exports=router;
