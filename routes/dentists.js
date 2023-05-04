@@ -9,7 +9,7 @@ router.post('/register',register);
 router.post('/login',login);
 router.get('/me',protect,getMe);
 router.get('/logout',logout);
-router.put('/:id',updateDentist);
+router.put('/',updateDentist);
 router.get('/',getDentists);
 
 module.exports=router;
