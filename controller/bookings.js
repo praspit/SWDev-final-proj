@@ -130,9 +130,9 @@ exports.updateBooking = async (req, res, next) => {
             return res.status(401).json({success: false, message: `User ${req.user.id} is not authorized to update this Booking`});
         }
 
-        if ( typeof req.body.prefHospital === 'undefined' && typeof req.body.prefHospital === 'undefined'){
-            return res.status(400).json({success: false, message: "User doesn't specify any preferred dentist or preferred hospital"});
-        }
+        // if ( typeof req.body.prefHospital === 'undefined' && typeof req.body.prefDentist === 'undefined'){
+        //     return res.status(400).json({success: false, message: "User doesn't specify any preferred dentist or preferred hospital"});
+        // }
 
         if ( typeof req.body.prefHospital !== 'undefined' ){      
             const hospital = await Hospital.findById(req.body.prefHospital);
