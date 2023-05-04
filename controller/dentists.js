@@ -1,18 +1,34 @@
 const Dentist = require('../models/Dentist');
 
+const sendTokenResponse=(dentist,statusCode,res)=>{
+  //Create token
+  const token=dentist.getSignedJwtToken();
+
+  const options ={
+    expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRE*24*60*60*1000),
+    httpOnly: true
+  };
+
+  if(process.env.NODE_ENV==='production'){
+    options.secure=true;
+  }
+  res.status(statusCode).cookie('token',token,options).json({
+    success:true,
+    //add for frontend
+    _id:dentist._id,
+    name: dentist.name,
+    email:dentist.email,
+    //end for frontend
+    token
+  })
+}
 //@desc   Register Dentist
 //@route  POST /api/v1/auth/register
 //@access Public
 exports.register=async (req,res,next)=>{
   try{
-    const {name, email, password, hospital}=req.body;
     //Create dentist
-    const dentist=await Dentist.create({
-      name,
-      email,
-      password,
-      hospital,
-    });
+    const dentist=await Dentist.create(req.body);
 
     //Create token
     // const token=dentist.getSignedJwtToken();
@@ -55,28 +71,6 @@ exports.login=async (req,res,next)=>{
     // const token=dentist.getSignedJwtToken();
   
     // res.status(200).json({success:true,token});
-    const sendTokenResponse=(dentist,statusCode,res)=>{
-      //Create token
-      const token=dentist.getSignedJwtToken();
-    
-      const options ={
-        expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRE*24*60*60*1000),
-        httpOnly: true
-      };
-    
-      if(process.env.NODE_ENV==='production'){
-        options.secure=true;
-      }
-      res.status(statusCode).cookie('token',token,options).json({
-        success:true,
-        //add for frontend
-        _id:dentist._id,
-        name: dentist.name,
-        email:dentist.email,
-        //end for frontend
-        token
-      })
-    }
     sendTokenResponse(dentist,200,res);
   } catch(err){
     return res.status(401).json({success:false, msg:'Cannot convert email or password to string'});
