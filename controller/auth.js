@@ -1,5 +1,27 @@
 const User = require('../models/User');
 
+const sendTokenResponse=(user,statusCode,res)=>{
+  //Create token
+  const token=user.getSignedJwtToken();
+
+  const options ={
+    expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRE*24*60*60*1000),
+    httpOnly: true
+  };
+
+  if(process.env.NODE_ENV==='production'){
+    options.secure=true;
+  }
+  res.status(statusCode).cookie('token',token,options).json({
+    success:true,
+    //add for frontend
+    _id:user._id,
+    name: user.name,
+    email:user.email,
+    //end for frontend
+    token
+  })
+}
 //@desc   Register User
 //@route  POST /api/v1/auth/register
 //@access Public
@@ -56,28 +78,6 @@ exports.login=async (req,res,next)=>{
     // const token=user.getSignedJwtToken();
   
     // res.status(200).json({success:true,token});
-    const sendTokenResponse=(user,statusCode,res)=>{
-      //Create token
-      const token=user.getSignedJwtToken();
-    
-      const options ={
-        expires:new Date(Date.now()+process.env.JWT_COOKIE_EXPIRE*24*60*60*1000),
-        httpOnly: true
-      };
-    
-      if(process.env.NODE_ENV==='production'){
-        options.secure=true;
-      }
-      res.status(statusCode).cookie('token',token,options).json({
-        success:true,
-        //add for frontend
-        _id:user._id,
-        name: user.name,
-        email:user.email,
-        //end for frontend
-        token
-      })
-    }
     sendTokenResponse(user,200,res);
   } catch(err){
     return res.status(401).json({success:false, msg:'Cannot convert email or password to string'});
