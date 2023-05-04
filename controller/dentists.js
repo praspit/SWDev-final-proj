@@ -109,7 +109,9 @@ exports.logout=async(req,res,next)=>{
 //@access   Private
 exports.updateDentist= async (req,res,next)=>{
   try {
-      const dentist = await this.getMe().data
+      const dentist=await Dentist.findById(req.dentist.id);
+      if(!dentist){res.status(400).json({success: false, message: `No Dentist with the id of ${req.params.id}`})}
+      // console.log(dentist.id)
       if(req.params.id && dentist.id !== req.params.id){
         return res.status(400).json({success:false, msg:"Not authorize to access this route"});
       }
