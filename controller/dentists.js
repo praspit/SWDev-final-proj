@@ -146,7 +146,10 @@ exports.getDentists= async (req,res,next)=>{
 
       let queryStr = JSON.stringify(reqQuery);
       queryStr = queryStr.replace(/\b(gt|get|lt|lte|in)\b/, match=>`$${match}`);
-      query = Dentist.find(JSON.parse(queryStr))
+      query = Dentist.find(JSON.parse(queryStr)).populate({
+        path: 'hospital',
+        select: 'name province tel'
+      })
 
       if(req.query.select){
           const fields = req.query.select.split(',').join(' ');
