@@ -113,7 +113,7 @@ exports.updateDentist= async (req,res,next)=>{
       if(req.params.id && dentist.id !== req.params.id){
         return res.status(400).json({success:false, msg:"Not authorize to access this route"});
       }
-      const response = await Dentist.findByIdAndUpdate(req.params.id, req.body, {
+      const response = await Dentist.findByIdAndUpdate(dentist.id, req.body, {
           new:true,
           runValidators: true
       });

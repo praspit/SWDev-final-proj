@@ -34,8 +34,7 @@ const DentistSchema=new mongoose.Schema({
   resetPasswordExpired: Date,
   hospital: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Hospital',
-      required: true,
+      ref: 'Hospital'
   },
   createdAt:{
     type:Date,
