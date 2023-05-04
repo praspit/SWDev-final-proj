@@ -50,9 +50,12 @@ exports.getBookings = async (req, res, next) => {
 exports.getBooking = async (req, res, next) => {
     try {
         const booking = await Booking.findById(req.params.id).populate({
-            path: 'hospital',
+            path: 'prefHospital',
             select: 'name province tel'
-        });
+        }).populate({
+            path: 'prefDentist',
+            select: 'name yearOfExperience areaOfExpertise'
+        })
         if (!booking) {
             return res.status(404).json({success: false, message: `No Booking with the id of ${req.params.id}}`});
         }
@@ -71,7 +74,7 @@ exports.getBooking = async (req, res, next) => {
 // @access  Private
 exports.addBooking = async (req, res, next) => {
     try {
-        if ( typeof req.body.prefHospital === 'undefined' && typeof req.body.prefHospital === 'undefined'){
+        if ( typeof req.body.prefHospital === 'undefined' && typeof req.body.prefDentist === 'undefined'){
             return res.status(400).json({success: false, message: "User doesn't specify any preferred dentist or preferred hospital"});
         }
 
